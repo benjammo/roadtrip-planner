@@ -1,10 +1,6 @@
-// grab user input from forms when go button is clicked
-function kelvin(x) {
-  let result = Math.round(((x - 273.15) * 1.8) + 32);
-  console.log(result);
-  return result;
-}
+const kelvin = (x) => Math.round(((x - 273.15) * 1.8) + 32);
 
+// grab user input from forms when go button is clicked
 document.getElementById("go").onclick = function() {
   let outputOrigin = document.getElementById("origin-weather");
   outputOrigin.innerText = "";
@@ -65,7 +61,7 @@ function pullOriginWeather(lat, lon) {
   .then((data) => {
     let weather = data.main;
     localStorage.setItem("originWeather", JSON.stringify(weather));
-    console.log(data)
+    console.log(data);
   })
 }
 
@@ -76,7 +72,7 @@ function pullDestinationWeather(lat, lon) {
   .then((data) => {
     let weather = data.main;
     localStorage.setItem("destinationWeather", JSON.stringify(weather));
-    console.log(data)
+    console.log(data);
   })
 }
 
@@ -89,15 +85,14 @@ async function printWeather() {
   let outputOrigin = document.getElementById("origin-weather");
   let outputDestination = document.getElementById("destination-weather");
 
-  let originWeather = JSON.parse(localStorage.getItem("originWeather"))
-  let destinationWeather = JSON.parse(localStorage.getItem("destinationWeather"))
+  let originWeather = JSON.parse(localStorage.getItem("originWeather"));
+  let destinationWeather = JSON.parse(localStorage.getItem("destinationWeather"));
   console.log(originWeather);
   console.log(destinationWeather);
 
   //append them into the HTML document
   const originPrintContent = document.createTextNode("The temperature in " + originCity + " is " + kelvin(originWeather.temp) + " with a high of " + kelvin(originWeather.temp_max) + " and a low of " + kelvin(originWeather.temp_min));
   const destinationPrintContent = document.createTextNode("The temperature in " + destinationCity + " is " + kelvin(destinationWeather.temp) + " with a high of " + kelvin(destinationWeather.temp_max) + " and a low of " + kelvin(destinationWeather.temp_min));
-
   outputOrigin.appendChild(originPrintContent);
   outputDestination.appendChild(destinationPrintContent);
  
@@ -105,7 +100,7 @@ async function printWeather() {
 
 }
 // origin fetch:
-  fetch('http://api.openweathermap.org/geo/1.0/direct?q=' + originCity + ',US-' + originState + ',USA&limit=1&appid=dcf2daf93d72ecbb94572260babdabff')
+  fetch('https://api.openweathermap.org/geo/1.0/direct?q=' + originCity + ',US-' + originState + ',USA&limit=1&appid=dcf2daf93d72ecbb94572260babdabff')
   .then((response) => response.json())
   .then((data) => {
     let lat = data[0].lat;
@@ -117,16 +112,14 @@ async function printWeather() {
 //print origin weather to page somehow
 
 // destination fetch:
-  fetch('http://api.openweathermap.org/geo/1.0/direct?q=' + destinationCity + ',US-' + destinationState + ',USA&limit=1&appid=dcf2daf93d72ecbb94572260babdabff')
+  fetch('https://api.openweathermap.org/geo/1.0/direct?q=' + destinationCity + ',US-' + destinationState + ',USA&limit=1&appid=dcf2daf93d72ecbb94572260babdabff')
   .then((response) => response.json())
   .then((data) => {
   let lat = data[0].lat;
   let lon = data[0].lon;
   pullDestinationWeather(lat, lon);
   console.log(data);
-  })
-  .then
-
+  });
 
 await printWeather();
 } 
